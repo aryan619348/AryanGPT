@@ -16,14 +16,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # #for production
-# OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
-# PINECONE_API_KEY = os.environ['PINECONE_API_KEY']
-# PINECONE_API_ENV = os.environ['PINECONE_API_ENV']
+OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
+PINECONE_API_KEY = os.environ['PINECONE_API_KEY']
+PINECONE_API_ENV = os.environ['PINECONE_API_ENV']
 
-#for testing
-os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
-PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
-PINECONE_API_ENV = os.getenv("PINECONE_API_ENV")
+# #for testing
+# os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+# PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
+# PINECONE_API_ENV = os.getenv("PINECONE_API_ENV")
 
 
 pinecone.init(
