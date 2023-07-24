@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat</title>
+  <link rel="stylesheet" href="static/chatbot_styles.css">
+</head>
+
+<body>
+  <div class="animated-background">
+    <div class="glowing">
+      <span style="--i:1;"></span>
+      <span style="--i:2;"></span>
+      <span style="--i:3;"></span>
+    </div>
+
+    <div class="glowing">
+      <span style="--i:1;"></span>
+      <span style="--i:2;"></span>
+      <span style="--i:3;"></span>
+    </div>
+
+    <div class="glowing">
+      <span style="--i:1;"></span>
+      <span style="--i:2;"></span>
+      <span style="--i:3;"></span>
+    </div>
+
+    <div class="glowing">
+      <span style="--i:1;"></span>
+      <span style="--i:2;"></span>
+      <span style="--i:3;"></span>
+    </div>
+  </div>
+
+  <div class="container">
+    <header>
+      <h1>Chat with Me</h1>
+      <h2>Custom chatbot made using OpenAI, Langchain and Pinecone</h2>
+      <h3></h3>
+
+    </header>
+
+    <div class="chat-window">
+      <div class="chat-container" id="chat-container">
+        <div class="message received">
+          <div class="message-content">
+            <p>Hello there!</p>
+          </div>
+        </div>
+
+        <div class="message received">
+          <div class="message-content">
+            <p>Ask me any question about Aryan Pillai and I will try to provide an answer</p>
+          </div>
+        </div>
+
+        <!-- Add more messages as needed -->
+
+      </div>
+      <div id="bottom-anchor"></div>
+    </div>
+
+    <div class="input-container">
+      <input type="text" id="user-message-input" placeholder="Type a message...">
+      <button id="send-btn">Send</button>
+    </div>
+
+    <footer>
+      <p>&copy; Aryan Pillai. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Function to send user message and display system reply
+      function sendMessage() {
+        var userMessage = $('#user-message-input').val().trim();
+        if (userMessage !== '') {
+          // Disable the input field and change the placeholder text to "Processing..."
+          disableInput();
+  
+          // Append the user message to the chat container
+          $('#chat-container').append('<div class="message sent"><div class="message-content"><p>' + userMessage + '</p></div></div>');
+          // Clear the user message input field
+          $('#user-message-input').val('');
+  
+          // Send the user message to the Flask API
+          $.ajax({
+            url: '/api/chat',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+              'message': userMessage
+            }),
+            success: function (response) {
+              var systemReply = response.reply;
+              // Append the system reply to the chat container
+              $('#chat-container').append('<div class="message received"><div class="message-content"><p>' + systemReply + '</p></div></div>');
+              // Scroll to the bottom of the chat container after a slight delay
+              setTimeout(scrollChatContainer, 100);
+  
+              // Re-enable the input field and set the placeholder text back to "Type a message..."
+              enableInput();
+            },
+            error: function (error) {
+              console.log(error);
+  
+              // Re-enable the input field and set the placeholder text back to "Type a message..."
+              enableInput();
+            }
+          });
+        }
+      }
+  
+      // Function to scroll the chat container to the bottom
+      function scrollChatContainer() {
+        var chatContainer = document.getElementById('chat-container');
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+  
+      // Function to disable the input field and set the placeholder text to "Processing..."
+      function disableInput() {
+        $('#user-message-input').prop('disabled', true);
+        $('#user-message-input').attr('placeholder', 'Processing...');
+        $('#send-btn').prop('disabled', true);
+      }
+  
+      // Function to enable the input field and set the placeholder text back to "Type a message..."
+      function enableInput() {
+        $('#user-message-input').prop('disabled', false);
+        $('#user-message-input').attr('placeholder', 'Type a message...');
+        $('#send-btn').prop('disabled', false);
+      }
+  
+      // Handle send button click event
+      $('#send-btn').click(function () {
+        sendMessage();
+      });
+  
+      // Handle enter key press event in the user message input field
+      $('#user-message-input').keypress(function (event) {
+        if (event.which === 13) {
+          event.preventDefault();
+          sendMessage();
+        }
+      });
+  
+      // Scroll to the bottom of the chat container initially
+      setTimeout(scrollChatContainer, 100);
+    });
+  </script>
+  
+</body>
+
+</html>
