@@ -7,6 +7,7 @@ from langchain.callbacks import get_openai_callback
 from waitress import serve
 import os
 from langchain.vectorstores import Pinecone
+from langchain.vectorstores import FAISS
 import pinecone
 from langchain.embeddings import OpenAIEmbeddings
 import os
@@ -17,8 +18,8 @@ load_dotenv()
 
 # #for production
 OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
-PINECONE_API_KEY = os.environ['PINECONE_API_KEY']
-PINECONE_API_ENV = os.environ['PINECONE_API_ENV']
+# PINECONE_API_KEY = os.environ['PINECONE_API_KEY']
+# PINECONE_API_ENV = os.environ['PINECONE_API_ENV']
 
 # #for testing
 # os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
@@ -26,11 +27,11 @@ PINECONE_API_ENV = os.environ['PINECONE_API_ENV']
 # PINECONE_API_ENV = os.getenv("PINECONE_API_ENV")
 
 
-pinecone.init(
-    api_key=PINECONE_API_KEY,  # find at app.pinecone.io
-    environment=PINECONE_API_ENV  # next to api key in console
-)
-index_name = "portfolio"
+# pinecone.init(
+#     api_key=PINECONE_API_KEY,  # find at app.pinecone.io
+#     environment=PINECONE_API_ENV  # next to api key in console
+# )
+# index_name = "portfolio"
 
 app = Flask(__name__)
 CORS(app)
@@ -51,7 +52,7 @@ def chat():
         #     VectorStore = pickle.load(f)
         embeddings = OpenAIEmbeddings()
         #VectorStore = FAISS.load_local("faiss_index_portfolio", embeddings)
-        docsearch = Pinecone.from_existing_index(index_name, embeddings)
+        docsearch = FAISS.load_local("faiss_index", embeddings)
         llm = ChatOpenAI(temperature=0, model_name='gpt-3.5-turbo')
         chain = load_qa_chain(llm, chain_type="stuff")
         
