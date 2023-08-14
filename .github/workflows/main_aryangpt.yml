@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'aryangpt'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_76FC72696B7D445E949524DD79A4E501 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2AA6BDE8901D4BF7B6699260DEDA5135 }}
