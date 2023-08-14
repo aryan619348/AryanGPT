@@ -6,7 +6,7 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.callbacks import get_openai_callback
 from waitress import serve
 import os
-from langchain.vectorstores import Pinecone
+from langchain.vectorstores import Pinecone 
 from langchain.vectorstores import FAISS
 import pinecone
 from langchain.embeddings import OpenAIEmbeddings
